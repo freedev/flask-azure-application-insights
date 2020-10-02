@@ -1,6 +1,5 @@
 # Load libraries
 import os
-import psutil
 import flask
 import time
 from flask import Flask
@@ -12,7 +11,7 @@ app = Flask(__name__)
 @app.route('/logging', methods=['GET'])
 def get_logging():
     logger.info('handling request /logging ' + str(os.getpid()))
-    return flask.jsonify({'status': 'ok', 'time': time.time()})
+    return flask.jsonify({'status': 'ok', 'time': time.time(), 'pid': os.getpid()})
 
 @app.route('/', methods=['GET'])
 def get_home():
