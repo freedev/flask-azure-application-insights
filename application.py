@@ -50,11 +50,12 @@ def getLogger():
             print(connection_string)
             handler = AzureLogHandler(connection_string=connection_string)
             logger[os.getpid()].addHandler(handler)
-            handler.setLevel(logging.INFO)
+            logger[os.getpid()].setLevel(logging.INFO)
             print("created logger for pid " + str([os.getpid()]))
         # handler.setFormatter(logging.Formatter('%(traceId)s %(spanId)s %(message)s'))
     return logger[os.getpid()]
 
+print(os.getpid())
 getLogger().info('process started ' + str(os.getpid()) + ' home 2')
 
 if __name__ == '__main__':
