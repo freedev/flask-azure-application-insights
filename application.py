@@ -25,6 +25,7 @@ from opencensus.ext.azure.log_exporter import AzureLogHandler
 # config_integration.trace_integrations(['logging'])
 connection_string = os.getenv('APPLICATIONINSIGHTS_CONNECTION_STRING')
 print(connection_string)
+
 def getLogger():
     global logger
     try:
@@ -37,11 +38,6 @@ def getLogger():
                 print('logger not empty')
         except:
             logger = {}
-            # root_logger = logging.getLogger()
-            # handler = AzureLogHandler(connection_string=connection_string)
-            # root_logger.addHandler(handler)
-            # handler.setLevel(logging.INFO)
-            # print("added AzureLogHandler handler for pid " + str([os.getpid()]))
         try:
             if logger[os.getpid()] is not None:
                 print('logger for pid found')
@@ -52,7 +48,6 @@ def getLogger():
             logger[os.getpid()].addHandler(handler)
             logger[os.getpid()].setLevel(logging.INFO)
             print("created logger for pid " + str([os.getpid()]))
-        # handler.setFormatter(logging.Formatter('%(traceId)s %(spanId)s %(message)s'))
     return logger[os.getpid()]
 
 print(os.getpid())
