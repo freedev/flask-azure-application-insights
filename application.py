@@ -5,18 +5,22 @@ import time
 from flask import Flask
 from opencensus.ext.azure.log_exporter import AzureLogHandler
 
+threads_num = os.getenv('GU_THREADS_NUM')
+work_num = os.getenv('GU_WORK_NUM')
+
 # instantiate flask
 app = Flask(__name__)
 
 @app.route('/logging', methods=['GET'])
 def get_logging():
-    getLogger().info('handling request /logging ' + str(os.getpid()))
-    return flask.jsonify({'status': 'ok', 'time': time.time(), 'pid': os.getpid()})
-
+    message = 'handling request /logging with pid %s threads %s workers %s' % (str(os.getpid()), threads_num, work_num)
+    getLogger().info(message)
+    return flask.jsonify({'status': 'ok', 'time': time.time(), 'pid': os.getpid(), 'threads_num': threads_num , 'work_num': work_num})
 
 @app.route('/', methods=['GET'])
 def get_home():
-    getLogger().info('handling request / ' + str(os.getpid()))
+    message = 'handling request / with pid %s threads %s workers %s' % (str(os.getpid()), threads_num, work_num)
+    getLogger().info(message)
     return 'ok'
 
 import logging
@@ -43,7 +47,7 @@ def getLogger():
     return logger[os.getpid()]
 
 print(os.getpid())
-getLogger().info('process started ' + str(os.getpid()) + ' home 2')
+getLogger().info('process started ' + str(os.getpid()))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', threaded=True)
