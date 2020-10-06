@@ -34,7 +34,7 @@ print(connection_string)
 def getLogger():
     global logger
     try:
-        if logger[str(os.getpid())] is not None:
+        if logger[os.getpid()] is not None:
             print("returning existing logger " + str([os.getpid()]))
             return logger[os.getpid()]
     except:
