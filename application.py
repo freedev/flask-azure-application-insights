@@ -21,6 +21,7 @@ def get_home():
 
 import logging
 from opencensus.ext.azure.log_exporter import AzureLogHandler
+logger={}
 
 # config_integration.trace_integrations(['logging'])
 connection_string = os.getenv('APPLICATIONINSIGHTS_CONNECTION_STRING')
@@ -29,25 +30,16 @@ print(connection_string)
 def getLogger():
     global logger
     try:
-        if logger[os.getpid()] is not None:
+        if logger[str(os.getpid())] is not None:
             print("returning existing logger " + str([os.getpid()]))
             return logger[os.getpid()]
     except:
-        try:
-            if logger is not None:
-                print('logger not empty')
-        except:
-            logger = {}
-        try:
-            if logger[os.getpid()] is not None:
-                print('logger for pid found')
-        except:
-            logger[os.getpid()] = logging.getLogger(str(os.getpid()))
-            print(connection_string)
-            handler = AzureLogHandler(connection_string=connection_string)
-            logger[os.getpid()].addHandler(handler)
-            logger[os.getpid()].setLevel(logging.INFO)
-            print("created logger for pid " + str([os.getpid()]))
+        logger[os.getpid()] = logging.getLogger(str(os.getpid()))
+        print(connection_string)
+        handler = AzureLogHandler(connection_string=connection_string)
+        logger[os.getpid()].addHandler(handler)
+        logger[os.getpid()].setLevel(logging.INFO)
+        print("created logger for pid " + str([os.getpid()]))
     return logger[os.getpid()]
 
 print(os.getpid())
